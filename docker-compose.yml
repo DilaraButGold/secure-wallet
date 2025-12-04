@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # 🐘 Veritabanı Servisi (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: secure-wallet-db
+    restart: always
+    environment:
+      POSTGRES_USER: walletuser      # Kullanıcı adı
+      POSTGRES_PASSWORD: walletpassword # Şifre
+      POSTGRES_DB: walletdb          # Veritabanı Adı
+    ports:
+      - "5433:5432" # DİKKAT: Bilgisayarımızın 5433 kapısını, Docker'ın 5432 kapısına bağlıyoruz.
+    volumes:
+      - wallet_data:/var/lib/postgresql/data
+
+  # 🎛️ Yönetim Paneli (Adminer)
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080" # DİKKAT: Tarayıcıdan http://localhost:8081 adresinden gireceğiz.
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+
+volumes:
+  wallet_data:

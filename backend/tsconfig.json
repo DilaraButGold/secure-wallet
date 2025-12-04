@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    /* Temel Ayarlar */
+    "target": "es2016", /* Çıktı versiyonu */
+    "module": "commonjs", /* Node.js için standart modül sistemi */
+    "moduleResolution": "node", /* Modülleri Node.js mantığıyla bul */
+    "rootDir": "./src", /* Kaynak dosyalar nerede? */
+    "outDir": "./dist", /* Derlenenler nereye gitsin? */
+    /* Uyumluluk */
+    "esModuleInterop": true, /* CommonJS ve ES Modules uyumu */
+    "forceConsistentCasingInFileNames": true, /* Dosya isimlerinde büyük/küçük harf duyarlılığı */
+    /* 🔥 TİP GÜVENLİĞİ (STRICT MODE) */
+    "strict": true, /* Katı kurallar açık */
+    "noImplicitAny": true, /* Tipi belirsiz 'any' yasak */
+    "skipLibCheck": true, /* Kütüphane dosyalarını kontrol edip vakit kaybetme */
+    /* ⚠️ HATA ÇÖZÜMÜ: Bu ayarları kapatıyoruz */
+    "verbatimModuleSyntax": false, /* Importları olduğu gibi bırakma, çevir */
+    "isolatedModules": false
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -1,0 +1,27 @@
+# --- GENEL ---
+node_modules/
+npm-debug.log
+.DS_Store
+.env
+
+# --- MOBILE (EXPO) ---
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+mobile/*.jks
+mobile/*.keystore
+mobile/android/app/build/
+mobile/android/.gradle/
+mobile/ios/Pods/
+mobile/ios/build/
+
+# --- BACKEND ---
+backend/dist/
+backend/uploads/
+
+# --- DOCKER ---
+wallet_data/
+
+# --- IDE ---
+.vscode/
+.idea/
