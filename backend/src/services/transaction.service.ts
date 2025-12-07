@@ -1,16 +1,16 @@
 import prisma from '../utils/prisma';
-import { Decimal } from '@prisma/client/runtime/library';
+import { Prisma } from '@prisma/client'; // 🔥 1. YENİ: Tip importu
 
 export const transferMoney = async (fromAccountId: number, toAccountId: number, amount: number) => {
     // Prisma transaction: Ya hepsi yapılır, ya hiçbiri.
-    return await prisma.$transaction(async (tx) => {
+    // 🔥 2. DÜZELTME: 'tx' değişkenine tip verdik
+    return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
 
-        // 1. Gönderen hesabı bul ve kilitle (Race Condition önlemi - Opsiyonel ama iyi olur)
+        // 1. Gönderen hesabı bul ve kilitle
         const sender = await tx.account.findUnique({ where: { id: fromAccountId } });
         if (!sender) throw new Error("Gönderen hesap bulunamadı.");
 
         // 2. Yetersiz bakiye kontrolü
-        // Decimal kıyaslaması (toNumber() ile çevirip bakıyoruz)
         if (sender.balance.toNumber() < amount) {
             throw new Error("Yetersiz bakiye!");
         }
@@ -18,13 +18,13 @@ export const transferMoney = async (fromAccountId: number, toAccountId: number, 
         // 3. Gönderenden para düş
         await tx.account.update({
             where: { id: fromAccountId },
-            data: { balance: { decrement: amount } } // Atomic decrement
+            data: { balance: { decrement: amount } }
         });
 
         // 4. Alıcıya para ekle
         await tx.account.update({
             where: { id: toAccountId },
-            data: { balance: { increment: amount } } // Atomic increment
+            data: { balance: { increment: amount } }
         });
 
         // 5. Dekont (Transaction) kaydı oluştur
@@ -43,7 +43,8 @@ export const transferMoney = async (fromAccountId: number, toAccountId: number, 
 };
 
 export const depositMoney = async (accountId: number, amount: number) => {
-    return await prisma.$transaction(async (tx) => {
+    // 🔥 3. DÜZELTME: Burada da 'tx' tipini ekledik
+    return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         // Para yatırma işlemi
         await tx.account.update({
             where: { id: accountId },
@@ -61,7 +62,7 @@ export const depositMoney = async (accountId: number, amount: number) => {
     });
 };
 
-// 🔥 YENİ: Hesap Hareketlerini Getir
+// 🔥 Hesap Hareketlerini Getir
 export const getHistory = async (accountId: number) => {
     return await prisma.transaction.findMany({
         where: {

@@ -3,6 +3,7 @@ import prisma from '../utils/prisma';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../utils/authMiddleware';
+import { Prisma } from '@prisma/client'; //  1. YENİ: Prisma tipini ekledik
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -10,7 +11,8 @@ export const register = async (req: Request, res: Response) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Transaction ile User ve Account aynı anda oluşturulur
-        const result = await prisma.$transaction(async (tx) => {
+        //  2. DÜZELTME: 'tx' değişkenine tip verdik
+        const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
             const user = await tx.user.create({
                 data: { fullName, email, password: hashedPassword }
             });

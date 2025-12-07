@@ -1,8 +1,10 @@
 import prisma from '../utils/prisma';
+import { Prisma } from '@prisma/client'; // 🔥 1. YENİ: Tip importu
 
 export const createUserAndAccount = async (fullName: string, email: string) => {
     // Transaction (ACID): Kullanıcı oluşursa hesabı da oluşmalı. Biri olmazsa diğeri de olmamalı.
-    return await prisma.$transaction(async (tx) => {
+    // 🔥 2. DÜZELTME: 'tx' değişkenine 'Prisma.TransactionClient' tipini verdik
+    return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         // 1. Kullanıcıyı oluştur
         const user = await tx.user.create({
             data: {
