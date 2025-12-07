@@ -7,8 +7,9 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-// 📡 API AYARI
-const API_URL = Platform.OS === 'android' ? 'http://10.0.2.2:3000' : 'http://localhost:3000';
+// 📡 API AYARI (CLOUD - RENDER)
+// Artık localhost yerine senin canlı sunucuna bağlanıyoruz!
+const API_URL = 'https://secure-wallet-api.onrender.com';
 
 export default function BankingApp() {
     const [token, setToken] = useState<string | null>(null);
@@ -22,7 +23,7 @@ export default function BankingApp() {
     const [fullName, setFullName] = useState('');
     const [isLoginView, setIsLoginView] = useState(true);
 
-    // 🔥 DÜZELTME BURADA: İsmi 'transferVisible' yaptık
+    // Modallar için State'ler
     const [transferVisible, setTransferVisible] = useState(false);
     const [depositVisible, setDepositVisible] = useState(false);
 
@@ -123,8 +124,7 @@ export default function BankingApp() {
             }, { headers: { Authorization: `Bearer ${token}` } });
 
             Alert.alert("Başarılı ✅", "Transfer gerçekleşti");
-            setTransferVisible(false); // Düzeltildi
-            setAmount(''); setTransferToId('');
+            setTransferVisible(false); setAmount(''); setTransferToId('');
             if (token && user) { fetchAccountData(token, user.id); fetchHistory(token); }
         } catch (e: any) {
             if (e.response?.status === 403) handleLogout();
@@ -155,6 +155,7 @@ export default function BankingApp() {
         const color = isIncoming ? '#27ae60' : '#e74c3c'; // Yeşil / Kırmızı
         const sign = isIncoming ? '+' : '-';
 
+        // Modern İkonlar
         const iconBg = isIncoming ? '#eafaf1' : '#fdedec';
         const icon = isDeposit ? '🏦' : (isIncoming ? '↙️' : '↗️');
 
@@ -227,6 +228,7 @@ export default function BankingApp() {
             {/* 1. HEADER (Profil & Çıkış) */}
             <View style={styles.header}>
                 <View>
+                    <Text style={styles.greeting}>Merhaba,</Text>
                     <Text style={styles.username}>{user?.fullName}</Text>
                 </View>
                 <TouchableOpacity onPress={handleLogout} style={styles.profileBtn}>

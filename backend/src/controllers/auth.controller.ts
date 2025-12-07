@@ -2,29 +2,30 @@ import { Request, Response } from 'express';
 import prisma from '../utils/prisma';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = "cok_gizli_anahtar_social_app_2024";
+import { JWT_SECRET } from '../utils/authMiddleware';
 
 export const register = async (req: Request, res: Response) => {
     try {
         const { fullName, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Transaction ile User ve Account aynı anda oluşturulur
         const result = await prisma.$transaction(async (tx) => {
             const user = await tx.user.create({
                 data: { fullName, email, password: hashedPassword }
             });
+
             const account = await tx.account.create({
                 data: { userId: user.id, type: "TRY", balance: 0.00 }
             });
+
             return { user, account };
         });
 
-        // Kayıt olurken de hesap ID'sini dönüyoruz
         res.status(201).json({
             message: "Kayıt başarılı!",
             data: result,
-            accountId: result.account.id // 🔥 EKLEME
+            accountId: result.account.id
         });
 
     } catch (error: any) {
@@ -43,16 +44,20 @@ export const login = async (req: Request, res: Response) => {
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) { res.status(401).json({ error: "Şifre hatalı." }); return; }
 
-        // 🔥 EKLEME: Giriş yaparken kullanıcının hesabını da bul
         const account = await prisma.account.findFirst({ where: { userId: user.id } });
 
-        const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+        // Token süresi 7 gün olarak ayarlandı
+        const token = jwt.sign(
+            { userId: user.id, email: user.email },
+            JWT_SECRET,
+            { expiresIn: '7d' }
+        );
 
         res.json({
             message: "Giriş başarılı!",
             token,
             user: { id: user.id, fullName: user.fullName },
-            accountId: account?.id // 🔥 Cüzdan Numarasını da gönderiyoruz
+            accountId: account?.id
         });
 
     } catch (error) {
