@@ -1,10 +1,17 @@
 💸 SecureWallet - Professional FinTech Solution
 
-SecureWallet, modern bankacılık sistemlerinin çekirdek prensiplerini (ACID Transactions, Security, Layered Architecture) simüle eden, uçtan uca (Full Stack) bir finansal teknoloji uygulamasıdır.
+SecureWallet, modern bankacılık sistemlerinin çekirdek prensiplerini (ACID Transactions, Security, Layered Architecture) simüle eden, uçtan uca (Full Stack) ve Cloud-Native bir finansal teknoloji uygulamasıdır.
 
 Bu proje; Backend (Node.js/TypeScript) üzerinde güvenli para transferi mimarisini ve Mobile (React Native) üzerinde modern kullanıcı deneyimini birleştirir.
 
- Mimari ve Teknoloji Yığını
+🚀 Canlı Demo (Live)
+
+Backend API şu anda Render (Frankfurt) sunucularında canlı olarak çalışmaktadır.
+
+🔗 API Base URL: https://secure-wallet-api.onrender.com
+(Not: Ücretsiz sunucu olduğu için ilk istekte uyanması 30-40 saniye sürebilir)
+
+🏗️ Mimari ve Teknoloji Yığını
 
 Katman
 
@@ -28,7 +35,7 @@ Veritabanı
 
 PostgreSQL
 
-İlişkisel veri ve Transaction yönetimi.
+İlişkisel veri ve Transaction yönetimi (Cloud Hosted).
 
 ORM
 
@@ -50,11 +57,11 @@ Cross-platform mobil bankacılık arayüzü.
 
 DevOps
 
-Docker
+Render & Docker
 
-Veritabanı ve yönetim paneli konteynerizasyonu.
+CI/CD süreçleri ve Cloud Deployment.
 
-🚀 Kritik Teknik Yetkinlikler
+💎 Kritik Teknik Yetkinlikler
 
 1. 🛡️ ACID Uyumlu Transfer Mimarisi
 
@@ -72,45 +79,39 @@ Services: İş mantığı ve veritabanı etkileşimi.
 
 Middlewares: Güvenlik (Auth) ve Hata Yönetimi.
 
-3. 🔒 Güvenlik Standartları
+3. 🔒 Güvenlik & Validasyon
 
 Tüm hassas rotalar JWT Middleware ile korunur.
 
-Kullanıcı, sadece kendi hesap ID'si üzerinden işlem yapabilir (Authorization).
+Giriş verileri (Body) Zod kütüphanesi ile runtime'da doğrulanır.
 
 Şifreler veritabanında Hash (Bcrypt) formatında saklanır.
 
-🛠️ Kurulum ve Çalıştırma
+🛠️ Yerel Kurulum (Local Development)
 
-Projeyi yerel ortamınızda çalıştırmak için:
+Projeyi kendi bilgisayarınızda geliştirmek isterseniz:
 
-1. Altyapıyı Başlat (Docker)
+1. Altyapıyı Başlat
 
-Ana dizinde:
-
+# PostgreSQL ve Adminer'ı başlatır
 docker-compose up -d
 
 
-2. Backend'i Başlat
+2. Backend Kurulumu
 
 cd backend
 npm install
+# .env dosyasını oluşturun ve DATABASE_URL ile JWT_SECRET ekleyin
 npx prisma migrate dev --name init
 npm run dev
 
 
-API http://localhost:3000 adresinde çalışır.
-
-3. Mobil Uygulamayı Başlat
-
-Yeni bir terminalde:
+3. Mobil Uygulama
 
 cd mobile
 npm install
 npx expo start
 
-
-Android emülatör için 'a' tuşuna basın.
 
 📡 API Özellikleri
 
@@ -142,7 +143,7 @@ POST
 
 /transactions/transfer
 
-(🔒) Güvenli para transferi.
+(🔒) Güvenli para transferi (ACID).
 
 POST
 
@@ -158,4 +159,4 @@ GET
 
 👨‍💻 Geliştirici Notu
 
-Bu proje; Mid-Level Backend yetkinliklerini, özellikle Transaction Integrity ve System Design konularını pekiştirmek amacıyla geliştirilmiştir.
+Bu proje; Mid-Level Backend yetkinliklerini, özellikle Transaction Integrity, Cloud Deployment ve System Design konularını pekiştirmek amacıyla geliştirilmiştir.
